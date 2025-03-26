@@ -198,6 +198,11 @@ AddrSpace::AddrSpace(AddrSpace* space) {
 
 AddrSpace::~AddrSpace()
 {
+	mmLock->Acquire();
+    for (unsigned int i = 0; i < GetNumPages(); i++) {
+        mm->DeallocatePage(pageTable[i].physicalPage);
+    }
+    mmLock->Release();
    delete pageTable;
 }
 
